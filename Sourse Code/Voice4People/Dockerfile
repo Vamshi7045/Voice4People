@@ -12,7 +12,8 @@ RUN find /tmp/java -name "*.java" > /tmp/sources.txt && \
     -d /tmp/classes \
     @/tmp/sources.txt
 
-RUN cp -r /tmp/webapp/* /usr/local/tomcat/webapps/ROOT/ && \
+RUN mkdir -p /usr/local/tomcat/webapps/ROOT && \
+    cp -r /tmp/webapp/* /usr/local/tomcat/webapps/ROOT/ && \
     mkdir -p /usr/local/tomcat/webapps/ROOT/WEB-INF/classes && \
     cp -r /tmp/classes/* /usr/local/tomcat/webapps/ROOT/WEB-INF/classes/ && \
     cp -r /tmp/webapp/WEB-INF/lib /usr/local/tomcat/webapps/ROOT/WEB-INF/

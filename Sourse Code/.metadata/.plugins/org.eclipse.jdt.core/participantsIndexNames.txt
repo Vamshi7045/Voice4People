@@ -1,5 +1,0 @@
-INDEX VERSION 1.134
-C:\Users\Lenovo\Desktop\Voice4People\Sourse Code\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\297923051.index
-\Voice4People\src\main\java
-C:\Users\Lenovo\Desktop\Voice4People\Sourse Code\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\1021443796.index
-\Voice4People\src\main\java

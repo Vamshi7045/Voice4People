@@ -1,9 +1,0 @@
-0:0:0:0:0:0:0:1 - - [14/Jul/2026:00:02:35 +0530] "GET /%3Cyour-project-name%3E/pages/adminLogin.jsp HTTP/1.1" 404 785
-0:0:0:0:0:0:0:1 - - [14/Jul/2026:00:02:43 +0530] "GET /Voice4People/pages/adminLogin.jsp HTTP/1.1" 200 1098
-0:0:0:0:0:0:0:1 - - [14/Jul/2026:00:02:45 +0530] "POST /Voice4People/AdminLoginServlet HTTP/1.1" 200 36
-0:0:0:0:0:0:0:1 - - [14/Jul/2026:00:02:55 +0530] "POST /Voice4People/AdminLoginServlet HTTP/1.1" 302 -
-0:0:0:0:0:0:0:1 - - [14/Jul/2026:00:02:55 +0530] "GET /Voice4People/pages/adminDashboard.jsp HTTP/1.1" 200 2189
-0:0:0:0:0:0:0:1 - - [14/Jul/2026:00:03:03 +0530] "GET /Voice4People/ViewComplaintsServlet HTTP/1.1" 200 6233
-0:0:0:0:0:0:0:1 - - [14/Jul/2026:00:03:03 +0530] "GET /Voice4People/uploads/1783869915888_WIN_20260712_20_44_21_Pro.jpg HTTP/1.1" 404 824
-0:0:0:0:0:0:0:1 - - [14/Jul/2026:00:03:03 +0530] "GET /Voice4People/uploads/1783866870312_WIN_20260712_20_03_23_Pro.jpg HTTP/1.1" 404 824
-0:0:0:0:0:0:0:1 - - [14/Jul/2026:00:03:07 +0530] "GET /Voice4People/AnalyticsServlet HTTP/1.1" 200 1221

@@ -1,0 +1,30 @@
+2:32:31 Tab1 RenderProcessGone
+2:32:31 Microsoft.UnloadController.ClearUnloadState
+2:32:31 Microsoft.Shutdown.TabStripModel.RunUnloadListenerBeforeClosing_false
+2:32:31 Microsoft.Shutdown.TabStripModel.InternalCloseTabsImpl_ClosedAll
+2:32:31 Microsoft.Shutdown.TabStripModel.SendDetachWebContentsNotifications
+2:32:31 Browser1 Close Tab1 at 0
+2:32:31 Microsoft.UnloadController.ClearUnloadState
+2:32:31 Tab1 WebContentsDestroyed
+2:32:31 Microsoft.UnloadController.IsUnclosableApp_IsNotWebApp
+2:32:31 Microsoft.UnloadController.HasCompletedUnloadProcessing_True
+2:32:31 Microsoft.Shutdown.OnWindowClosing
+2:32:31 Microsoft.UnloadController.IsUnclosableApp_IsNotWebApp
+2:32:31 Microsoft.UnloadController.HasCompletedUnloadProcessing_True
+2:32:31 Microsoft.Shutdown.OnWindowClosing_MaybeClearBrowsingDataOnExit
+2:32:31 Microsoft.Shutdown.OnWindowClosing_ClearBrowsingDataOnExitNotInProgress
+2:32:31 Microsoft.Shutdown.OnWindowClosingPostClearBrowsingData_NoBrowsingDataCleared
+2:32:31 Widget Closed: BrowserWidget
+2:32:31 Microsoft.UnloadController.TabStripEmpty
+2:32:31 Microsoft.UnloadController.HasCompletedUnloadProcessing_True
+2:32:31 Microsoft.Shutdown.OnWindowClosing
+2:32:31 Microsoft.Shutdown.OnWindowClosing_DeleteScheduled
+2:32:31 Microsoft.Last_Browser_Removed
+2:32:31 Microsoft.Shutdown.ShutdownIfNoBrowsers
+2:32:31 Microsoft.Shutdown.SetTryingToQuit_Quitting
+2:32:31 Microsoft.Shutdown.NotifyAppTerminating
+2:32:31 Microsoft.Shutdown.OnAppExiting
+2:32:31 Microsoft.Shutdown.HandleAppExitingForPlatform_Aura
+2:32:31 Microsoft.Shutdown.HandleAppExitingForPlatform_Aura.NotificationUIManager_StartShutdown
+2:32:31 Microsoft.Shutdown.HandleAppExitingForPlatform_Aura.CloseAllSecondaryWidgets
+2:32:31 Shutdown

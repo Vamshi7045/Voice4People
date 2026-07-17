@@ -1,0 +1,335 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+
+<%@ page import="java.util.List"%>
+<%@ page import="com.voice4people.model.Complaint"%>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>All Complaints</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f2f2f2;
+    margin:0;
+}
+
+.container{
+    width:95%;
+    margin:30px auto;
+}
+
+h2{
+    text-align:center;
+    color:#0d6efd;
+}
+
+.search-box{
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px lightgray;
+}
+
+.search-box input,
+.search-box select{
+    padding:8px;
+    margin-right:10px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+.search-box button{
+    padding:8px 15px;
+    background:#0d6efd;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.search-box button:hover{
+    background:#084298;
+}
+
+.reset-btn{
+    background:#6c757d !important;
+}
+
+.reset-btn:hover{
+    background:#495057 !important;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+table th{
+    background:#0d6efd;
+    color:white;
+    padding:12px;
+}
+
+table td{
+    padding:10px;
+    border:1px solid #ddd;
+    text-align:center;
+    vertical-align:middle;
+}
+
+tr:nth-child(even){
+    background:#f8f8f8;
+}
+
+.status-select{
+    padding:5px;
+}
+
+.update-btn{
+    margin-top:8px;
+    padding:6px 12px;
+    background:#198754;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.update-btn:hover{
+    background:#146c43;
+}
+
+.complaint-image{
+    width:120px;
+    height:90px;
+    object-fit:cover;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>All Complaints</h2>
+
+<!-- Search Section -->
+
+<div class="search-box">
+
+<form action="<%=request.getContextPath()%>/SearchComplaintServlet" method="get">
+
+<input
+type="text"
+name="title"
+placeholder="Search by Title">
+
+<select name="category">
+
+<option value="All">All Categories</option>
+<option value="Road">Road</option>
+<option value="Water Supply">Water Supply</option>
+<option value="Electricity">Electricity</option>
+<option value="Drainage">Drainage</option>
+<option value="Street Lights">Street Lights</option>
+<option value="Garbage">Garbage</option>
+<option value="Other">Other</option>
+
+</select>
+
+<select name="status">
+
+<option value="All">All Status</option>
+<option value="Pending">Pending</option>
+<option value="In Progress">In Progress</option>
+<option value="Resolved">Resolved</option>
+
+</select>
+
+<button type="submit">
+🔍 Search
+</button>
+
+<a href="<%=request.getContextPath()%>/ViewComplaintsServlet">
+<button
+type="button"
+class="reset-btn">
+Reset
+</button>
+</a>
+
+</form>
+
+</div>
+
+<!-- Complaint Table -->
+
+<table>
+
+<tr>
+
+<th>ID</th>
+<th>User ID</th>
+<th>Title</th>
+<th>Category</th>
+<th>Description</th>
+<th>District</th>
+<th>Mandal</th>
+<th>Village</th>
+<th>Address</th>
+<th>Image</th>
+<th>Status</th>
+<th>Action</th>
+
+</tr>
+
+<%
+
+List<Complaint> list=(List<Complaint>)request.getAttribute("complaints");
+
+if(list!=null && !list.isEmpty()){
+
+for(Complaint c:list){
+
+%>
+
+<tr>
+
+<td><%=c.getId()%></td>
+
+<td><%=c.getUserId()%></td>
+
+<td><%=c.getTitle()%></td>
+
+<td><%=c.getCategory()%></td>
+
+<td><%=c.getDescription()%></td>
+
+<td><%=c.getDistrict()%></td>
+
+<td><%=c.getMandal()%></td>
+
+<td><%=c.getVillage()%></td>
+
+<td><%=c.getAddress()%></td>
+
+<td>
+
+<%
+if(c.getImage()!=null && !c.getImage().trim().isEmpty()){
+%>
+
+<img
+src="<%=request.getContextPath()%>/uploads/<%=c.getImage()%>"
+class="complaint-image"
+alt="Complaint Image">
+
+<%
+}else{
+%>
+
+No Image
+
+<%
+}
+%>
+
+</td>
+
+<td>
+
+<%=c.getStatus()%>
+
+</td>
+
+<td>
+
+<form action="<%=request.getContextPath()%>/UpdateStatusServlet" method="post">
+
+<input
+type="hidden"
+name="id"
+value="<%=c.getId()%>">
+
+<select
+name="status"
+class="status-select">
+
+<option value="Pending"
+<%= "Pending".equals(c.getStatus()) ? "selected" : "" %>>
+Pending
+</option>
+
+<option value="In Progress"
+<%= "In Progress".equals(c.getStatus()) ? "selected" : "" %>>
+In Progress
+</option>
+
+<option value="Resolved"
+<%= "Resolved".equals(c.getStatus()) ? "selected" : "" %>>
+Resolved
+</option>
+
+</select>
+
+<br><br>
+
+<button
+type="submit"
+class="update-btn">
+
+Update
+
+</button>
+
+</form>
+
+</td>
+
+</tr>
+
+<%
+
+}
+
+}else{
+
+%>
+
+<tr>
+
+<td colspan="12">
+
+No complaints found.
+
+</td>
+
+</tr>
+
+<%
+
+}
+
+%>
+
+</table>
+
+</div>
+
+</body>
+
+</html>

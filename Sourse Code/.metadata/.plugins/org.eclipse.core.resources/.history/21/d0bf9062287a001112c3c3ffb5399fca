@@ -1,0 +1,5 @@
+package com.voice4people.dao;
+
+public class ComplaintDAO {
+
+}

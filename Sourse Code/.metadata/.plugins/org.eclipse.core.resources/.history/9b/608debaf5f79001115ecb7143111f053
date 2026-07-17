@@ -1,0 +1,42 @@
+package com.voice4people.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import com.voice4people.db.DBConnection;
+import com.voice4people.model.User;
+
+public class UserDAO {
+
+    public boolean registerUser(User user) {
+
+        boolean status = false;
+
+        try {
+
+            Connection con = DBConnection.getConnection();
+
+            String sql = "INSERT INTO users(full_name,email,mobile,password,role) VALUES(?,?,?,?,?)";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getMobile());
+            ps.setString(4, user.getPassword());
+            ps.setString(5, user.getRole());
+
+            int row = ps.executeUpdate();
+
+            if (row > 0) {
+                status = true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return status;
+    }
+
+}

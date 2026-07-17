@@ -1,0 +1,176 @@
+package com.voice4people.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.voice4people.db.DBConnection;
+import com.voice4people.model.Complaint;
+
+public class ComplaintDAO {
+
+    // ============================
+    // Add Complaint
+	public boolean updateComplaintStatus(int id, String status) {
+
+	    boolean result = false;
+
+	    try {
+
+	        Connection con = DBConnection.getConnection();
+
+	        String sql = "UPDATE complaints SET status=? WHERE id=?";
+
+	        PreparedStatement ps = con.prepareStatement(sql);
+
+	        ps.setString(1, status);
+	        ps.setInt(2, id);
+
+	        int rows = ps.executeUpdate();
+
+	        if(rows > 0){
+	            result = true;
+	        }
+
+	        ps.close();
+	        con.close();
+
+	    } catch(Exception e){
+	        e.printStackTrace();
+	    }
+
+	    return result;
+	}
+    // ============================
+    public boolean addComplaint(Complaint complaint) {
+
+        boolean status = false;
+
+        try {
+
+            Connection con = DBConnection.getConnection();
+
+            String sql = "INSERT INTO complaints(user_id,title,category,description,district,mandal,village,address,status) VALUES(?,?,?,?,?,?,?,?,?)";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, complaint.getUserId());
+            ps.setString(2, complaint.getTitle());
+            ps.setString(3, complaint.getCategory());
+            ps.setString(4, complaint.getDescription());
+            ps.setString(5, complaint.getDistrict());
+            ps.setString(6, complaint.getMandal());
+            ps.setString(7, complaint.getVillage());
+            ps.setString(8, complaint.getAddress());
+            ps.setString(9, "Pending");
+
+            int rows = ps.executeUpdate();
+
+            if (rows > 0) {
+                status = true;
+            }
+
+            ps.close();
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return status;
+    }
+    
+
+    // ============================
+    // Get Complaints by User
+    public List<Complaint> getAllComplaints() {
+
+        List<Complaint> list = new ArrayList<>();
+
+        try {
+
+            Connection con = DBConnection.getConnection();
+
+            String sql = "SELECT * FROM complaints ORDER BY created_at DESC";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Complaint c = new Complaint();
+
+                c.setId(rs.getInt("id"));
+                c.setUserId(rs.getInt("user_id"));
+                c.setTitle(rs.getString("title"));
+                c.setCategory(rs.getString("category"));
+                c.setDescription(rs.getString("description"));
+                c.setDistrict(rs.getString("district"));
+                c.setMandal(rs.getString("mandal"));
+                c.setVillage(rs.getString("village"));
+                c.setAddress(rs.getString("address"));
+                c.setStatus(rs.getString("status"));
+
+                list.add(c);
+            }
+
+            rs.close();
+            ps.close();
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+    // ============================
+    public List<Complaint> getComplaintsByUser(int userId) {
+
+        List<Complaint> list = new ArrayList<>();
+
+        try {
+
+            Connection con = DBConnection.getConnection();
+
+            String sql = "SELECT * FROM complaints WHERE user_id=? ORDER BY id DESC";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, userId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Complaint complaint = new Complaint();
+
+                complaint.setId(rs.getInt("id"));
+                complaint.setUserId(rs.getInt("user_id"));
+                complaint.setTitle(rs.getString("title"));
+                complaint.setCategory(rs.getString("category"));
+                complaint.setDescription(rs.getString("description"));
+                complaint.setDistrict(rs.getString("district"));
+                complaint.setMandal(rs.getString("mandal"));
+                complaint.setVillage(rs.getString("village"));
+                complaint.setAddress(rs.getString("address"));
+                complaint.setStatus(rs.getString("status"));
+
+                list.add(complaint);
+            }
+
+            rs.close();
+            ps.close();
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+}

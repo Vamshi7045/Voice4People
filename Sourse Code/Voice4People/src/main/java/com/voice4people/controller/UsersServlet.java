@@ -1,0 +1,33 @@
+package com.voice4people.controller;
+
+import java.io.IOException;
+import java.util.List;
+
+import com.voice4people.dao.UserDAO;
+import com.voice4people.model.User;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@WebServlet("/UsersServlet")
+public class UsersServlet extends HttpServlet {
+
+    private static final long serialVersionUID = 1L;
+
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+
+        UserDAO dao = new UserDAO();
+
+        List<User> users = dao.getAllUsers();
+
+        request.setAttribute("users", users);
+
+        request.getRequestDispatcher("pages/users.jsp")
+               .forward(request, response);
+    }
+}	

@@ -1,0 +1,7 @@
+INDEX VERSION 1.4+C:\Users\Lenovo\Desktop\Voice4People\Sourse Code\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+2657953516.index
+1018434416.index
+1384951813.index
+3947262084.index
+3625409345.index
+2531190296.index

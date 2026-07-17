@@ -1,0 +1,286 @@
+<%@ page language="java"
+    contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%@ page import="java.util.List"%>
+<%@ page import="com.voice4people.model.Complaint"%>
+
+<%
+List<Complaint> complaints =
+    (List<Complaint>) request.getAttribute("complaints");
+
+if (complaints == null) {
+    response.sendRedirect("citizenDashboard.jsp");
+    return;
+}
+%>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Track Complaints</title>
+
+<style>
+
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #f2f2f2;
+}
+
+.container {
+    width: 90%;
+    margin: 40px auto;
+}
+
+h2 {
+    text-align: center;
+    color: #0d6efd;
+}
+
+.card {
+    background: white;
+    margin: 25px auto;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px lightgray;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.status {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.timeline {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    position: relative;
+}
+
+.timeline::before {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 10%;
+    right: 10%;
+    height: 4px;
+    background: #ddd;
+    z-index: 0;
+}
+
+.step {
+    text-align: center;
+    width: 30%;
+    position: relative;
+    z-index: 1;
+}
+
+.circle {
+    width: 30px;
+    height: 30px;
+    margin: auto;
+    border-radius: 50%;
+    background: #ddd;
+    color: white;
+    line-height: 30px;
+    font-weight: bold;
+}
+
+.active {
+    background: #0d6efd;
+}
+
+.step-text {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.pending {
+    color: #dc3545;
+}
+
+.progress {
+    color: #fd7e14;
+}
+
+.resolved {
+    color: #198754;
+}
+
+.back {
+    display: block;
+    width: 220px;
+    margin: 30px auto;
+    padding: 12px;
+    text-align: center;
+    background: #0d6efd;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🔍 Track My Complaints</h2>
+
+<%
+
+if (complaints.isEmpty()) {
+
+%>
+
+<div class="card">
+
+<h3>No complaints found.</h3>
+
+</div>
+
+<%
+
+} else {
+
+for (Complaint c : complaints) {
+
+String status = c.getStatus();
+
+int step = 1;
+
+if ("In Progress".equalsIgnoreCase(status)) {
+    step = 2;
+}
+
+if ("Resolved".equalsIgnoreCase(status)) {
+    step = 3;
+}
+
+%>
+
+<div class="card">
+
+<div class="title">
+
+Complaint #<%=c.getId()%> -
+<%=c.getTitle()%>
+
+</div>
+
+<div class="status">
+
+Current Status:
+
+<%
+
+if ("Pending".equalsIgnoreCase(status)) {
+
+%>
+
+<span class="pending">
+<%=status%>
+</span>
+
+<%
+
+} else if ("In Progress".equalsIgnoreCase(status)) {
+
+%>
+
+<span class="progress">
+<%=status%>
+</span>
+
+<%
+
+} else {
+
+%>
+
+<span class="resolved">
+<%=status%>
+</span>
+
+<%
+
+}
+
+%>
+
+</div>
+
+<div class="timeline">
+
+<div class="step">
+
+<div class="circle <%=step >= 1 ? "active" : ""%>">
+✓
+</div>
+
+<div class="step-text">
+Complaint Submitted
+</div>
+
+</div>
+
+<div class="step">
+
+<div class="circle <%=step >= 2 ? "active" : ""%>">
+✓
+</div>
+
+<div class="step-text">
+In Progress
+</div>
+
+</div>
+
+<div class="step">
+
+<div class="circle <%=step >= 3 ? "active" : ""%>">
+✓
+</div>
+
+<div class="step-text">
+Resolved
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<%
+
+}
+
+}
+
+%>
+
+<a href="citizenDashboard.jsp" class="back">
+
+⬅ Back to Dashboard
+
+</a>
+
+</div>
+
+</body>
+
+</html>

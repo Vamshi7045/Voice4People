@@ -1,0 +1,123 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Citizen Registration</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+}
+
+.container{
+    width:400px;
+    margin:50px auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.3);
+}
+
+h2{
+    text-align:center;
+    color:#0d6efd;
+}
+
+input,select{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+    box-sizing:border-box;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:#0d6efd;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#084298;
+}
+
+.login-link{
+    text-align:center;
+    margin-top:15px;
+}
+
+.login-link a{
+    color:#0d6efd;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.login-link a:hover{
+    text-decoration:underline;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>Citizen Registration</h2>
+
+<form action="../RegisterServlet" method="post">
+
+    <input
+        type="text"
+        name="fullname"
+        placeholder="Full Name"
+        required>
+
+    <input
+        type="email"
+        name="email"
+        placeholder="Email Address"
+        required>
+
+    <input
+        type="text"
+        name="phone"
+        placeholder="Phone Number"
+        required>
+
+    <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        required>
+
+    <select name="role">
+        <option value="Citizen">Citizen</option>
+    </select>
+
+    <button type="submit">
+        Register
+    </button>
+
+</form>
+
+<div class="login-link">
+    Already have an account?
+    <a href="login.jsp">Login</a>
+</div>
+
+</div>
+
+</body>
+</html>

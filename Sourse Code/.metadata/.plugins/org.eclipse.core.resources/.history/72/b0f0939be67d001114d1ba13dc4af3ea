@@ -1,0 +1,31 @@
+package com.voice4people.controller;
+
+import java.io.IOException;
+
+import com.voice4people.dao.ComplaintDAO;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@WebServlet("/UpdateStatusServlet")
+public class UpdateStatusServlet extends HttpServlet {
+
+    private static final long serialVersionUID = 1L;
+
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+
+        int id = Integer.parseInt(request.getParameter("id"));
+        String status = request.getParameter("status");
+
+        ComplaintDAO dao = new ComplaintDAO();
+
+        dao.updateComplaintStatus(id, status);
+
+        response.sendRedirect("ViewComplaintsServlet");
+    }
+}

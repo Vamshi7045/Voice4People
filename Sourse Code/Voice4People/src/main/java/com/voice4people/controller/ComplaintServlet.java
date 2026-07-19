@@ -1,103 +1,72 @@
 package com.voice4people.controller;
 
-import java.io.File;
 import java.io.IOException;
 
 import com.voice4people.dao.ComplaintDAO;
 import com.voice4people.model.Complaint;
+import com.voice4people.model.User;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/ComplaintServlet")
-@MultipartConfig(
-        fileSizeThreshold = 1024 * 1024,
-        maxFileSize = 1024 * 1024 * 5,
-        maxRequestSize = 1024 * 1024 * 10
-)
 public class ComplaintServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-    protected void doPost(HttpServletRequest request,
-            HttpServletResponse response)
-            throws ServletException, IOException {
+        protected void doPost(
+                        HttpServletRequest request,
+                        HttpServletResponse response)
+                        throws ServletException, IOException {
 
-        int userId = Integer.parseInt(request.getParameter("userId"));
+                HttpSession session = request.getSession(false);
 
-        String title = request.getParameter("title");
-        String category = request.getParameter("category");
-        String description = request.getParameter("description");
-        String district = request.getParameter("district");
-        String mandal = request.getParameter("mandal");
-        String village = request.getParameter("village");
-        String address = request.getParameter("address");
+                // Check login
+                if (session == null || session.getAttribute("user") == null) {
 
-        Part imagePart = request.getPart("image");
+                        response.sendRedirect("pages/login.jsp");
+                        return;
+                }
 
-        String fileName = "";
+                // Get logged-in user from session
+                User user = (User) session.getAttribute("user");
 
-        if (imagePart != null && imagePart.getSize() > 0) {
+                int userId = user.getId();
 
-            String originalFileName =
-                    imagePart.getSubmittedFileName();
+                String title = request.getParameter("title");
+                String category = request.getParameter("category");
+                String description = request.getParameter("description");
+                String district = request.getParameter("district");
+                String mandal = request.getParameter("mandal");
+                String village = request.getParameter("village");
+                String address = request.getParameter("address");
 
-            fileName = System.currentTimeMillis()
-                    + "_" + originalFileName;
+                Complaint complaint = new Complaint();
 
-            String uploadPath =
-                    getServletContext().getRealPath("/")
-                    + File.separator
-                    + "uploads";
+                complaint.setUserId(userId);
+                complaint.setTitle(title);
+                complaint.setCategory(category);
+                complaint.setDescription(description);
+                complaint.setDistrict(district);
+                complaint.setMandal(mandal);
+                complaint.setVillage(village);
+                complaint.setAddress(address);
 
-            File uploadDir = new File(uploadPath);
+                ComplaintDAO dao = new ComplaintDAO();
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
+                if (dao.addComplaint(complaint)) {
 
-            File imageFile =
-                    new File(uploadDir, fileName);
+                        response.sendRedirect(
+                                        "pages/citizenDashboard.jsp");
 
-            imagePart.write(imageFile.getAbsolutePath());
+                } else {
 
-            System.out.println("=================================");
-            System.out.println("IMAGE UPLOAD SUCCESS");
-            System.out.println("UPLOAD PATH: "
-                    + imageFile.getAbsolutePath());
-            System.out.println("FILE NAME: "
-                    + fileName);
-            System.out.println("=================================");
+                        response.getWriter().println(
+                                        "<h2>Complaint Submission Failed!</h2>");
+                }
         }
-
-        Complaint complaint = new Complaint();
-
-        complaint.setUserId(userId);
-        complaint.setTitle(title);
-        complaint.setCategory(category);
-        complaint.setDescription(description);
-        complaint.setDistrict(district);
-        complaint.setMandal(mandal);
-        complaint.setVillage(village);
-        complaint.setAddress(address);
-        complaint.setImage(fileName);
-
-        ComplaintDAO dao = new ComplaintDAO();
-
-        if (dao.addComplaint(complaint)) {
-
-            response.sendRedirect(
-                    "pages/citizenDashboard.jsp");
-
-        } else {
-
-            response.getWriter().println(
-                    "<h2>Complaint Submission Failed!</h2>");
-        }
-    }
 }

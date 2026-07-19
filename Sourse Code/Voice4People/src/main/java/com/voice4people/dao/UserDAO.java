@@ -29,21 +29,25 @@ public class UserDAO {
 
             ps.setString(1, user.getFullName());
             ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPhone());   // Changed
+            ps.setString(3, user.getPhone());
             ps.setString(4, user.getPassword());
             ps.setString(5, user.getRole());
 
             int rows = ps.executeUpdate();
 
-            if(rows > 0){
+            if (rows > 0) {
                 status = true;
             }
 
             ps.close();
             con.close();
 
-        } catch(Exception e){
+        } catch (Exception e) {
+
             e.printStackTrace();
+
+            System.out.println(
+                    "REGISTRATION ERROR: " + e.getMessage());
         }
 
         return status;
@@ -69,24 +73,24 @@ public class UserDAO {
 
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
 
                 user = new User();
 
                 user.setId(rs.getInt("id"));
                 user.setFullName(rs.getString("fullname"));
                 user.setEmail(rs.getString("email"));
-                user.setPhone(rs.getString("phone"));   // Changed
+                user.setPhone(rs.getString("phone"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getString("role"));
-
             }
 
             rs.close();
             ps.close();
             con.close();
 
-        } catch(Exception e){
+        } catch (Exception e) {
+
             e.printStackTrace();
         }
 
@@ -96,11 +100,11 @@ public class UserDAO {
     // ===========================
     // Update Profile
     // ===========================
-    public boolean updateProfile(User user){
+    public boolean updateProfile(User user) {
 
         boolean status = false;
 
-        try{
+        try {
 
             Connection con = DBConnection.getConnection();
 
@@ -114,19 +118,24 @@ public class UserDAO {
 
             int rows = ps.executeUpdate();
 
-            if(rows > 0){
+            if (rows > 0) {
                 status = true;
             }
 
             ps.close();
             con.close();
 
-        }catch(Exception e){
+        } catch (Exception e) {
+
             e.printStackTrace();
         }
 
         return status;
     }
+
+    // ===========================
+    // Get All Users
+    // ===========================
     public List<User> getAllUsers() {
 
         List<User> list = new ArrayList<>();
@@ -159,6 +168,7 @@ public class UserDAO {
             con.close();
 
         } catch (Exception e) {
+
             e.printStackTrace();
         }
 

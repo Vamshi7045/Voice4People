@@ -12,37 +12,41 @@ import com.voice4people.model.Complaint;
 public class ComplaintDAO {
 
     // ============================
+    // Update Complaint Status
+    // ============================
+    public boolean updateComplaintStatus(int id, String status) {
+
+        boolean result = false;
+
+        try {
+
+            Connection con = DBConnection.getConnection();
+
+            String sql = "UPDATE complaints SET status=? WHERE id=?";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, status);
+            ps.setInt(2, id);
+
+            int rows = ps.executeUpdate();
+
+            if (rows > 0) {
+                result = true;
+            }
+
+            ps.close();
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    // ============================
     // Add Complaint
-	public boolean updateComplaintStatus(int id, String status) {
-
-	    boolean result = false;
-
-	    try {
-
-	        Connection con = DBConnection.getConnection();
-
-	        String sql = "UPDATE complaints SET status=? WHERE id=?";
-
-	        PreparedStatement ps = con.prepareStatement(sql);
-
-	        ps.setString(1, status);
-	        ps.setInt(2, id);
-
-	        int rows = ps.executeUpdate();
-
-	        if(rows > 0){
-	            result = true;
-	        }
-
-	        ps.close();
-	        con.close();
-
-	    } catch(Exception e){
-	        e.printStackTrace();
-	    }
-
-	    return result;
-	}
     // ============================
     public boolean addComplaint(Complaint complaint) {
 
@@ -52,7 +56,9 @@ public class ComplaintDAO {
 
             Connection con = DBConnection.getConnection();
 
-            String sql = "INSERT INTO complaints(user_id,title,category,description,district,mandal,village,address,status,image) VALUES(?,?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO complaints "
+                    + "(user_id,title,category,description,district,mandal,village,address,status) "
+                    + "VALUES(?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -65,7 +71,6 @@ public class ComplaintDAO {
             ps.setString(7, complaint.getVillage());
             ps.setString(8, complaint.getAddress());
             ps.setString(9, "Pending");
-            ps.setString(10, complaint.getImage());
 
             int rows = ps.executeUpdate();
 
@@ -82,10 +87,10 @@ public class ComplaintDAO {
 
         return status;
     }
-    
 
     // ============================
-    // Get Complaints by User
+    // Get All Complaints
+    // ============================
     public List<Complaint> getAllComplaints() {
 
         List<Complaint> list = new ArrayList<>();
@@ -114,7 +119,6 @@ public class ComplaintDAO {
                 c.setVillage(rs.getString("village"));
                 c.setAddress(rs.getString("address"));
                 c.setStatus(rs.getString("status"));
-                c.setImage(rs.getString("image"));
                 c.setPriority(rs.getString("priority"));
 
                 list.add(c);
@@ -130,6 +134,9 @@ public class ComplaintDAO {
 
         return list;
     }
+
+    // ============================
+    // Get Complaints By User
     // ============================
     public List<Complaint> getComplaintsByUser(int userId) {
 
@@ -161,8 +168,8 @@ public class ComplaintDAO {
                 complaint.setVillage(rs.getString("village"));
                 complaint.setAddress(rs.getString("address"));
                 complaint.setStatus(rs.getString("status"));
-                complaint.setImage(rs.getString("image"));
                 complaint.setPriority(rs.getString("priority"));
+
                 list.add(complaint);
             }
 
@@ -176,6 +183,10 @@ public class ComplaintDAO {
 
         return list;
     }
+
+    // ============================
+    // Total Complaints
+    // ============================
     public int getTotalComplaints() {
 
         int count = 0;
@@ -204,6 +215,10 @@ public class ComplaintDAO {
 
         return count;
     }
+
+    // ============================
+    // Pending Complaints
+    // ============================
     public int getPendingComplaints() {
 
         int count = 0;
@@ -232,6 +247,10 @@ public class ComplaintDAO {
 
         return count;
     }
+
+    // ============================
+    // In Progress Complaints
+    // ============================
     public int getInProgressComplaints() {
 
         int count = 0;
@@ -260,7 +279,10 @@ public class ComplaintDAO {
 
         return count;
     }
-//    ResolvedComplaints
+
+    // ============================
+    // Resolved Complaints
+    // ============================
     public int getResolvedComplaints() {
 
         int count = 0;
@@ -289,6 +311,10 @@ public class ComplaintDAO {
 
         return count;
     }
+
+    // ============================
+    // User Total Complaints
+    // ============================
     public int getUserTotalComplaints(int userId) {
 
         int count = 0;
@@ -305,7 +331,7 @@ public class ComplaintDAO {
 
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 count = rs.getInt(1);
             }
 
@@ -313,12 +339,16 @@ public class ComplaintDAO {
             ps.close();
             con.close();
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return count;
     }
+
+    // ============================
+    // User Pending Complaints
+    // ============================
     public int getUserPendingComplaints(int userId) {
 
         int count = 0;
@@ -327,7 +357,8 @@ public class ComplaintDAO {
 
             Connection con = DBConnection.getConnection();
 
-            String sql = "SELECT COUNT(*) FROM complaints WHERE user_id=? AND status='Pending'";
+            String sql = "SELECT COUNT(*) FROM complaints "
+                    + "WHERE user_id=? AND status='Pending'";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -335,7 +366,7 @@ public class ComplaintDAO {
 
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 count = rs.getInt(1);
             }
 
@@ -343,12 +374,16 @@ public class ComplaintDAO {
             ps.close();
             con.close();
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return count;
     }
+
+    // ============================
+    // User In Progress Complaints
+    // ============================
     public int getUserInProgressComplaints(int userId) {
 
         int count = 0;
@@ -357,7 +392,8 @@ public class ComplaintDAO {
 
             Connection con = DBConnection.getConnection();
 
-            String sql = "SELECT COUNT(*) FROM complaints WHERE user_id=? AND status='In Progress'";
+            String sql = "SELECT COUNT(*) FROM complaints "
+                    + "WHERE user_id=? AND status='In Progress'";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -365,7 +401,7 @@ public class ComplaintDAO {
 
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 count = rs.getInt(1);
             }
 
@@ -373,12 +409,16 @@ public class ComplaintDAO {
             ps.close();
             con.close();
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return count;
     }
+
+    // ============================
+    // User Resolved Complaints
+    // ============================
     public int getUserResolvedComplaints(int userId) {
 
         int count = 0;
@@ -387,7 +427,8 @@ public class ComplaintDAO {
 
             Connection con = DBConnection.getConnection();
 
-            String sql = "SELECT COUNT(*) FROM complaints WHERE user_id=? AND status='Resolved'";
+            String sql = "SELECT COUNT(*) FROM complaints "
+                    + "WHERE user_id=? AND status='Resolved'";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -395,7 +436,7 @@ public class ComplaintDAO {
 
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 count = rs.getInt(1);
             }
 
@@ -403,13 +444,20 @@ public class ComplaintDAO {
             ps.close();
             con.close();
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return count;
     }
-    public List<Complaint> searchComplaints(String title, String category, String status) {
+
+    // ============================
+    // Search Complaints
+    // ============================
+    public List<Complaint> searchComplaints(
+            String title,
+            String category,
+            String status) {
 
         List<Complaint> list = new ArrayList<>();
 
@@ -419,15 +467,15 @@ public class ComplaintDAO {
 
             String sql = "SELECT * FROM complaints WHERE 1=1";
 
-            if(title != null && !title.trim().isEmpty()){
+            if (title != null && !title.trim().isEmpty()) {
                 sql += " AND title LIKE ?";
             }
 
-            if(category != null && !category.equals("All")){
+            if (category != null && !category.equals("All")) {
                 sql += " AND category=?";
             }
 
-            if(status != null && !status.equals("All")){
+            if (status != null && !status.equals("All")) {
                 sql += " AND status=?";
             }
 
@@ -437,21 +485,21 @@ public class ComplaintDAO {
 
             int index = 1;
 
-            if(title != null && !title.trim().isEmpty()){
+            if (title != null && !title.trim().isEmpty()) {
                 ps.setString(index++, "%" + title + "%");
             }
 
-            if(category != null && !category.equals("All")){
+            if (category != null && !category.equals("All")) {
                 ps.setString(index++, category);
             }
 
-            if(status != null && !status.equals("All")){
+            if (status != null && !status.equals("All")) {
                 ps.setString(index++, status);
             }
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()){
+            while (rs.next()) {
 
                 Complaint c = new Complaint();
 
@@ -465,8 +513,8 @@ public class ComplaintDAO {
                 c.setVillage(rs.getString("village"));
                 c.setAddress(rs.getString("address"));
                 c.setStatus(rs.getString("status"));
-                c.setImage(rs.getString("image"));
                 c.setPriority(rs.getString("priority"));
+
                 list.add(c);
             }
 
@@ -474,12 +522,16 @@ public class ComplaintDAO {
             ps.close();
             con.close();
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return list;
     }
+
+    // ============================
+    // Road Complaints
+    // ============================
     public int getRoadComplaints() {
 
         int count = 0;
@@ -494,7 +546,7 @@ public class ComplaintDAO {
 
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 count = rs.getInt(1);
             }
 
@@ -502,12 +554,16 @@ public class ComplaintDAO {
             ps.close();
             con.close();
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return count;
     }
+
+    // ============================
+    // Water Complaints
+    // ============================
     public int getWaterComplaints() {
 
         int count = 0;
@@ -516,13 +572,14 @@ public class ComplaintDAO {
 
             Connection con = DBConnection.getConnection();
 
-            String sql = "SELECT COUNT(*) FROM complaints WHERE category='Water Supply'";
+            String sql = "SELECT COUNT(*) FROM complaints "
+                    + "WHERE category='Water Supply'";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 count = rs.getInt(1);
             }
 
@@ -530,12 +587,16 @@ public class ComplaintDAO {
             ps.close();
             con.close();
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return count;
     }
+
+    // ============================
+    // Electricity Complaints
+    // ============================
     public int getElectricityComplaints() {
 
         int count = 0;
@@ -544,13 +605,14 @@ public class ComplaintDAO {
 
             Connection con = DBConnection.getConnection();
 
-            String sql = "SELECT COUNT(*) FROM complaints WHERE category='Electricity'";
+            String sql = "SELECT COUNT(*) FROM complaints "
+                    + "WHERE category='Electricity'";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 count = rs.getInt(1);
             }
 
@@ -558,12 +620,16 @@ public class ComplaintDAO {
             ps.close();
             con.close();
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return count;
     }
+
+    // ============================
+    // Get Complaints By User ID
+    // ============================
     public List<Complaint> getComplaintsByUserId(int userId) {
 
         List<Complaint> list = new ArrayList<>();
@@ -572,7 +638,8 @@ public class ComplaintDAO {
 
             Connection con = DBConnection.getConnection();
 
-            String sql = "SELECT * FROM complaints WHERE user_id=? ORDER BY id DESC";
+            String sql = "SELECT * FROM complaints "
+                    + "WHERE user_id=? ORDER BY id DESC";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -594,8 +661,8 @@ public class ComplaintDAO {
                 complaint.setVillage(rs.getString("village"));
                 complaint.setAddress(rs.getString("address"));
                 complaint.setStatus(rs.getString("status"));
-                complaint.setImage(rs.getString("image"));
                 complaint.setPriority(rs.getString("priority"));
+
                 list.add(complaint);
             }
 
@@ -609,176 +676,155 @@ public class ComplaintDAO {
 
         return list;
     }
- // ==========================
- // Get Complaint By ID
- // ==========================
 
- public Complaint getComplaintById(int id) {
+    // ============================
+    // Get Complaint By ID
+    // ============================
+    public Complaint getComplaintById(int id) {
 
-     Complaint complaint = null;
+        Complaint complaint = null;
 
-     try {
+        try {
 
-         Connection con = DBConnection.getConnection();
+            Connection con = DBConnection.getConnection();
 
-         String sql = "SELECT * FROM complaints WHERE id=?";
+            String sql = "SELECT * FROM complaints WHERE id=?";
 
-         PreparedStatement ps = con.prepareStatement(sql);
+            PreparedStatement ps = con.prepareStatement(sql);
 
-         ps.setInt(1, id);
+            ps.setInt(1, id);
 
-         ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-         if (rs.next()) {
+            if (rs.next()) {
 
-             complaint = new Complaint();
+                complaint = new Complaint();
 
-             complaint.setId(rs.getInt("id"));
-             complaint.setUserId(rs.getInt("user_id"));
-             complaint.setTitle(rs.getString("title"));
-             complaint.setCategory(rs.getString("category"));
-             complaint.setDescription(rs.getString("description"));
-             complaint.setDistrict(rs.getString("district"));
-             complaint.setMandal(rs.getString("mandal"));
-             complaint.setVillage(rs.getString("village"));
-             complaint.setAddress(rs.getString("address"));
-             complaint.setStatus(rs.getString("status"));
-             complaint.setImage(rs.getString("image"));
-             complaint.setPriority(rs.getString("priority"));
-         }
+                complaint.setId(rs.getInt("id"));
+                complaint.setUserId(rs.getInt("user_id"));
+                complaint.setTitle(rs.getString("title"));
+                complaint.setCategory(rs.getString("category"));
+                complaint.setDescription(rs.getString("description"));
+                complaint.setDistrict(rs.getString("district"));
+                complaint.setMandal(rs.getString("mandal"));
+                complaint.setVillage(rs.getString("village"));
+                complaint.setAddress(rs.getString("address"));
+                complaint.setStatus(rs.getString("status"));
+                complaint.setPriority(rs.getString("priority"));
+            }
 
-         rs.close();
-         ps.close();
-         con.close();
+            rs.close();
+            ps.close();
+            con.close();
 
-     } catch (Exception e) {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-         e.printStackTrace();
+        return complaint;
+    }
 
-     }
+    // ============================
+    // Add Complaint Status History
+    // ============================
+    public boolean addStatusHistory(int complaintId, String status) {
 
-     return complaint;
- }
-//============================
-//Add Complaint Status History
-//============================
+        boolean result = false;
 
-public boolean addStatusHistory(int complaintId, String status) {
+        try {
 
-  boolean result = false;
+            Connection con = DBConnection.getConnection();
 
-  try {
+            String sql = "INSERT INTO complaint_status_history "
+                    + "(complaint_id, status) VALUES (?, ?)";
 
-      Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
 
-      String sql = "INSERT INTO complaint_status_history "
-                 + "(complaint_id, status) VALUES (?, ?)";
+            ps.setInt(1, complaintId);
+            ps.setString(2, status);
 
-      PreparedStatement ps =
-              con.prepareStatement(sql);
+            int rows = ps.executeUpdate();
 
-      ps.setInt(1, complaintId);
-      ps.setString(2, status);
+            if (rows > 0) {
+                result = true;
+            }
 
-      int rows = ps.executeUpdate();
+            ps.close();
+            con.close();
 
-      if (rows > 0) {
-          result = true;
-      }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-      ps.close();
-      con.close();
+        return result;
+    }
 
-  } catch (Exception e) {
+    // ============================
+    // Get Status History
+    // ============================
+    public List<String> getStatusHistoryByComplaintId(int complaintId) {
 
-      e.printStackTrace();
-  }
+        List<String> history = new ArrayList<>();
 
-  return result;
-}
-//============================
-//Get Status History
-//============================
+        try {
 
-public List<String> getStatusHistoryByComplaintId(int complaintId) {
+            Connection con = DBConnection.getConnection();
 
- List<String> history = new ArrayList<>();
+            String sql = "SELECT status FROM complaint_status_history "
+                    + "WHERE complaint_id=? ORDER BY updated_at ASC";
 
- try {
+            PreparedStatement ps = con.prepareStatement(sql);
 
-     Connection con = DBConnection.getConnection();
+            ps.setInt(1, complaintId);
 
-     String sql = "SELECT status FROM complaint_status_history "
-                + "WHERE complaint_id=? ORDER BY updated_at ASC";
+            ResultSet rs = ps.executeQuery();
 
-     PreparedStatement ps = con.prepareStatement(sql);
+            while (rs.next()) {
+                history.add(rs.getString("status"));
+            }
 
-     ps.setInt(1, complaintId);
+            rs.close();
+            ps.close();
+            con.close();
 
-     ResultSet rs = ps.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-     while (rs.next()) {
+        return history;
+    }
 
-         history.add(rs.getString("status"));
+    // ============================
+    // Update Complaint Priority
+    // ============================
+    public boolean updateComplaintPriority(int id, String priority) {
 
-     }
+        boolean result = false;
 
-     rs.close();
-     ps.close();
-     con.close();
+        try {
 
- } catch (Exception e) {
+            Connection con = DBConnection.getConnection();
 
-     e.printStackTrace();
+            String sql = "UPDATE complaints SET priority=? WHERE id=?";
 
- }
+            PreparedStatement ps = con.prepareStatement(sql);
 
- return history;
-}
-//============================
-//Update Complaint Priority
-//============================
+            ps.setString(1, priority);
+            ps.setInt(2, id);
 
-public boolean updateComplaintPriority(
-     int id,
-     String priority) {
+            int rows = ps.executeUpdate();
 
- boolean result = false;
+            if (rows > 0) {
+                result = true;
+            }
 
- try {
+            ps.close();
+            con.close();
 
-     Connection con =
-             DBConnection.getConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-     String sql =
-             "UPDATE complaints "
-             + "SET priority=? "
-             + "WHERE id=?";
-
-     PreparedStatement ps =
-             con.prepareStatement(sql);
-
-     ps.setString(1, priority);
-     ps.setInt(2, id);
-
-     int rows =
-             ps.executeUpdate();
-
-     if (rows > 0) {
-
-         result = true;
-
-     }
-
-     ps.close();
-     con.close();
-
- } catch (Exception e) {
-
-     e.printStackTrace();
-
- }
-
- return result;
-}
+        return result;
+    }
 }

@@ -17,6 +17,7 @@ public class AdminLoginServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
+    @Override
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response)
             throws ServletException, IOException {
@@ -28,20 +29,25 @@ public class AdminLoginServlet extends HttpServlet {
 
         User user = dao.loginUser(email, password);
 
-        if(user != null && "admin".equalsIgnoreCase(user.getRole())){
+        if (user != null
+                && user.getRole() != null
+                && user.getRole().equalsIgnoreCase("admin")) {
 
             HttpSession session = request.getSession();
 
             session.setAttribute("admin", user);
 
-            response.sendRedirect("pages/adminDashboard.jsp");
+            response.sendRedirect(
+                    request.getContextPath()
+                    + "/pages/adminDashboard.jsp"
+            );
 
-        }else{
+        } else {
 
-            response.getWriter().println("<h2>Invalid Admin Credentials</h2>");
-
+            response.sendRedirect(
+                    request.getContextPath()
+                    + "/pages/adminLogin.jsp?error=invalid"
+            );
         }
-
     }
-
 }

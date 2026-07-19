@@ -16,124 +16,105 @@
 
 <style>
 
-body{
-    font-family:Arial;
-    background:#f2f2f2;
-    margin:0;
+body {
+    font-family: Arial;
+    background: #f2f2f2;
+    margin: 0;
 }
 
-.container{
-    width:95%;
-    margin:30px auto;
+.container {
+    width: 95%;
+    margin: 30px auto;
 }
 
-h2{
-    text-align:center;
-    color:#0d6efd;
+h2 {
+    text-align: center;
+    color: #0d6efd;
 }
 
-.search-box{
-    background:white;
-    padding:20px;
-    margin-bottom:20px;
-    border-radius:10px;
-    box-shadow:0 0 10px lightgray;
+.search-box {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px lightgray;
 }
 
 .search-box input,
-.search-box select{
-    padding:8px;
-    margin-right:10px;
-    border:1px solid #ccc;
-    border-radius:5px;
+.search-box select {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-.search-box button{
-    padding:8px 15px;
-    background:#0d6efd;
-    color:white;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
+.search-box button {
+    padding: 8px 15px;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.search-box button:hover{
-    background:#084298;
+.search-box button:hover {
+    background: #084298;
 }
 
-.reset-btn{
-    background:#6c757d !important;
+.reset-btn {
+    background: #6c757d !important;
 }
 
-.reset-btn:hover{
-    background:#495057 !important;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
 }
 
-table{
-    width:100%;
-    border-collapse:collapse;
-    background:white;
+table th {
+    background: #0d6efd;
+    color: white;
+    padding: 12px;
 }
 
-table th{
-    background:#0d6efd;
-    color:white;
-    padding:12px;
+table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
 }
 
-table td{
-    padding:10px;
-    border:1px solid #ddd;
-    text-align:center;
-    vertical-align:middle;
+tr:nth-child(even) {
+    background: #f8f8f8;
 }
 
-tr:nth-child(even){
-    background:#f8f8f8;
+.status-select {
+    padding: 6px;
+    width: 140px;
 }
 
-.status-select,
-.priority-select{
-    padding:6px;
-    margin-top:5px;
-    width:140px;
+.update-btn {
+    margin-top: 10px;
+    padding: 6px 12px;
+    background: #198754;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.update-btn{
-    margin-top:10px;
-    padding:6px 12px;
-    background:#198754;
-    color:white;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
+.update-btn:hover {
+    background: #146c43;
 }
 
-.update-btn:hover{
-    background:#146c43;
-}
-
-.complaint-image{
-    width:120px;
-    height:90px;
-    object-fit:cover;
-    border-radius:6px;
-    border:1px solid #ccc;
-}
-
-.priority-high{
-    color:#dc3545;
-    font-weight:bold;
-}
-
-.priority-medium{
-    color:#fd7e14;
-    font-weight:bold;
-}
-
-.priority-low{
-    color:#198754;
-    font-weight:bold;
+.details-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #0d6efd;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 8px;
 }
 
 </style>
@@ -146,9 +127,7 @@ tr:nth-child(even){
 
 <h2>All Complaints</h2>
 
-<!-- ==========================
-     SEARCH SECTION
-========================== -->
+<!-- SEARCH -->
 
 <div class="search-box">
 
@@ -188,12 +167,8 @@ tr:nth-child(even){
 
 <a href="<%=request.getContextPath()%>/ViewComplaintsServlet">
 
-<button
-    type="button"
-    class="reset-btn">
-
+<button type="button" class="reset-btn">
 Reset
-
 </button>
 
 </a>
@@ -202,9 +177,8 @@ Reset
 
 </div>
 
-<!-- ==========================
-     COMPLAINT TABLE
-========================== -->
+
+<!-- COMPLAINT TABLE -->
 
 <table>
 
@@ -219,9 +193,7 @@ Reset
 <th>Mandal</th>
 <th>Village</th>
 <th>Address</th>
-<th>Image</th>
 <th>Status</th>
-<th>Priority</th>
 <th>Action</th>
 
 </tr>
@@ -229,11 +201,11 @@ Reset
 <%
 
 List<Complaint> list =
-    (List<Complaint>)request.getAttribute("complaints");
+    (List<Complaint>) request.getAttribute("complaints");
 
-if(list != null && !list.isEmpty()){
+if (list != null && !list.isEmpty()) {
 
-    for(Complaint c : list){
+    for (Complaint c : list) {
 
 %>
 
@@ -275,105 +247,17 @@ if(list != null && !list.isEmpty()){
 <%=c.getAddress()%>
 </td>
 
-<!-- IMAGE -->
-
 <td>
-
-<%
-
-if(c.getImage() != null &&
-   !c.getImage().trim().isEmpty()){
-
-%>
-
-<img
-src="<%=request.getContextPath()%>/uploads/<%=c.getImage()%>"
-class="complaint-image"
-alt="Complaint Image">
-
-<%
-
-}else{
-
-%>
-
-No Image
-
-<%
-
-}
-
-%>
-
-</td>
-
-<!-- STATUS -->
-
-<td>
-
+<strong>
 <%=c.getStatus()%>
-
+</strong>
 </td>
-
-<!-- PRIORITY -->
-
-<td>
-
-<%
-
-String priority = c.getPriority();
-
-if("High".equalsIgnoreCase(priority)){
-
-%>
-
-<span class="priority-high">
-🔴 High
-</span>
-
-<%
-
-}else if("Low".equalsIgnoreCase(priority)){
-
-%>
-
-<span class="priority-low">
-🟢 Low
-</span>
-
-<%
-
-}else{
-
-%>
-
-<span class="priority-medium">
-🟡 Medium
-</span>
-
-<%
-
-}
-
-%>
-
-</td>
-
-<!-- ACTION -->
 
 <td>
 
 <a
-    href="<%=request.getContextPath()%>/ComplaintDetailsServlet?id=<%=c.getId()%>"
-    style="
-        display:inline-block;
-        padding:6px 12px;
-        background:#0d6efd;
-        color:white;
-        text-decoration:none;
-        border-radius:5px;
-        margin-bottom:8px;
-    ">
+    class="details-btn"
+    href="<%=request.getContextPath()%>/ComplaintDetailsServlet?id=<%=c.getId()%>">
 
 🔍 View Details
 
@@ -387,8 +271,6 @@ if("High".equalsIgnoreCase(priority)){
     type="hidden"
     name="id"
     value="<%=c.getId()%>">
-
-<!-- STATUS -->
 
 <select
     name="status"
@@ -425,48 +307,11 @@ Resolved
 
 <br>
 
-<!-- PRIORITY -->
-
-<select
-    name="priority"
-    class="priority-select">
-
-<option
-    value="High"
-    <%= "High".equals(c.getPriority())
-        ? "selected" : "" %>>
-
-🔴 High
-
-</option>
-
-<option
-    value="Medium"
-    <%= "Medium".equals(c.getPriority())
-        ? "selected" : "" %>>
-
-🟡 Medium
-
-</option>
-
-<option
-    value="Low"
-    <%= "Low".equals(c.getPriority())
-        ? "selected" : "" %>>
-
-🟢 Low
-
-</option>
-
-</select>
-
-<br>
-
 <button
     type="submit"
     class="update-btn">
 
-Update
+Update Status
 
 </button>
 
@@ -480,13 +325,13 @@ Update
 
     }
 
-}else{
+} else {
 
 %>
 
 <tr>
 
-<td colspan="13">
+<td colspan="11">
 
 No complaints found.
 

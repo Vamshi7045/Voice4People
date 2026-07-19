@@ -286,15 +286,17 @@ const categoryChart = new Chart(
 
         data:{
 
-            labels:[
+        	labels:[
 
-                'Road',
+        	    'Road',
+        	    'Water Supply',
+        	    'Electricity',
+        	    'Drainage',
+        	    'Street Lights',
+        	    'Garbage',
+        	    'Other'
 
-                'Water Supply',
-
-                'Electricity'
-
-            ],
+        	],
 
             datasets:[{
 
@@ -306,7 +308,15 @@ const categoryChart = new Chart(
 
                     <%=request.getAttribute("water")%>,
 
-                    <%=request.getAttribute("electricity")%>
+                    <%=request.getAttribute("electricity")%>,
+
+                    <%=request.getAttribute("drainage")%>,
+
+                    <%=request.getAttribute("streetLights")%>,
+
+                    <%=request.getAttribute("garbage")%>,
+
+                    <%=request.getAttribute("other")%>
 
                 ]
 

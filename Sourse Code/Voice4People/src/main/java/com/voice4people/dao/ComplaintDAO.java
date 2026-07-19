@@ -557,7 +557,43 @@ public class ComplaintDAO {
         return result;
     }
 
+ // ============================
+ // Category Complaint Count
+ // ============================
+ public int getCategoryComplaints(String category) {
 
+     int count = 0;
+
+     try {
+
+         Connection con = DBConnection.getConnection();
+
+         String sql =
+                 "SELECT COUNT(*) FROM complaints WHERE category=?";
+
+         PreparedStatement ps =
+                 con.prepareStatement(sql);
+
+         ps.setString(1, category);
+
+         ResultSet rs = ps.executeQuery();
+
+         if (rs.next()) {
+             count = rs.getInt(1);
+         }
+
+         rs.close();
+         ps.close();
+         con.close();
+
+     } catch (Exception e) {
+         e.printStackTrace();
+     }
+
+     return count;
+ }
+    
+    
     // ============================
     // Generic Count
     // ============================

@@ -3,6 +3,7 @@ package com.voice4people.controller;
 import java.io.IOException;
 
 import com.voice4people.dao.ComplaintDAO;
+import com.voice4people.model.Complaint;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,7 +23,7 @@ public class UpdateStatusServlet extends HttpServlet {
         int id = Integer.parseInt(
                 request.getParameter("id"));
 
-        String status =
+        String newStatus =
                 request.getParameter("status");
 
         String priority =
@@ -31,46 +32,71 @@ public class UpdateStatusServlet extends HttpServlet {
         ComplaintDAO dao =
                 new ComplaintDAO();
 
-        // ============================
+        // ==================================
+        // Get Existing Complaint
+        // ==================================
+
+        Complaint complaint =
+                dao.getComplaintById(id);
+
+        if (complaint == null) {
+
+            response.sendRedirect(
+                    request.getContextPath()
+                    + "/ViewComplaintsServlet");
+
+            return;
+        }
+
+        String oldStatus =
+                complaint.getStatus();
+
+        // ==================================
         // Update Status
-        // ============================
+        // ==================================
 
-        boolean updated =
-                dao.updateComplaintStatus(id, status);
+        boolean statusUpdated =
+                dao.updateComplaintStatus(id, newStatus);
 
-        // ============================
+        // ==================================
         // Update Priority
-        // ============================
+        // ==================================
 
         boolean priorityUpdated =
                 dao.updateComplaintPriority(id, priority);
 
-        // ============================
-        // Save Status History
-        // ============================
+        // ==================================
+        // Save History Only If Status Changed
+        // ==================================
 
-        if (updated) {
+        if (statusUpdated &&
+                !newStatus.equalsIgnoreCase(oldStatus)) {
 
             boolean historySaved =
-                    dao.addStatusHistory(id, status);
+                    dao.addStatusHistory(id, newStatus);
 
             System.out.println(
-                    "Status Updated: " + updated);
-
-            System.out.println(
-                    "Priority Updated: "
-                    + priorityUpdated);
+                    "Status Changed: "
+                    + oldStatus
+                    + " → "
+                    + newStatus);
 
             System.out.println(
                     "History Saved: "
                     + historySaved);
-
-        } else {
-
-            System.out.println(
-                    "Status Update Failed");
-
         }
+
+        System.out.println(
+                "Status Updated: "
+                + statusUpdated);
+
+        System.out.println(
+                "Priority Updated: "
+                + priorityUpdated);
+
+        // ==================================
+        // Redirect
+        // ==================================
 
         response.sendRedirect(
                 request.getContextPath()

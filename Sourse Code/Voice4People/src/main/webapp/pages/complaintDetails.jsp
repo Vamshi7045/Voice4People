@@ -2,12 +2,16 @@
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<%@ page import="java.util.List"%>
 <%@ page import="com.voice4people.model.Complaint"%>
 
 <%
 
 Complaint complaint =
     (Complaint)request.getAttribute("complaint");
+
+List<String> history =
+    (List<String>)request.getAttribute("history");
 
 if(complaint == null){
 
@@ -109,6 +113,18 @@ h2{
 
 }
 
+.status{
+
+    padding:6px 12px;
+
+    background:#ffc107;
+
+    border-radius:5px;
+
+    font-weight:bold;
+
+}
+
 .complaint-image{
 
     width:100%;
@@ -125,11 +141,35 @@ h2{
 
 }
 
-.status{
+.history-box{
 
-    padding:6px 12px;
+    margin-top:30px;
 
-    background:#ffc107;
+    padding:20px;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+}
+
+.history-box h3{
+
+    color:#0d6efd;
+
+    margin-top:0;
+
+}
+
+.history-item{
+
+    padding:12px;
+
+    margin:10px 0;
+
+    background:#f8f9fa;
+
+    border-left:5px solid #0d6efd;
 
     border-radius:5px;
 
@@ -287,7 +327,7 @@ h2{
 
 <div class="row">
 
-<div class="label">Status</div>
+<div class="label">Current Status</div>
 
 <div class="value">
 
@@ -323,6 +363,44 @@ alt="Complaint Image">
 }
 
 %>
+
+<!-- STATUS HISTORY -->
+
+<div class="history-box">
+
+<h3>📜 Complaint Status History</h3>
+
+<%
+
+if(history != null && !history.isEmpty()){
+
+    for(String status : history){
+
+%>
+
+<div class="history-item">
+
+<%=status%>
+
+</div>
+
+<%
+
+    }
+
+}else{
+
+%>
+
+<p>No status history available.</p>
+
+<%
+
+}
+
+%>
+
+</div>
 
 <a href="adminDashboard.jsp" class="back">
 
